@@ -1,0 +1,91 @@
+:root {
+  --orange: #ffa500;
+  --primary: #0a0c21;
+  --secondary: #2e3192;
+}
+
+::placeholder {
+  color: var(--secondary);
+}
+
+.converter__wrapper {
+  padding: 2px;
+  border-radius: 6px;
+  box-shadow: 5px 5px 10px #261b3f;
+  display: block;
+  background: linear-gradient(to bottom, var(--primary), var(--secondary));
+  color: white;
+}
+
+.module {
+  background: var(--primary);
+  border-radius: 6px;
+  margin: 0;
+  padding: 1.5rem;
+}
+
+.you__have {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  color: rgb(187, 187, 187);
+}
+.fromDiv {
+  border-radius: 12px;
+  background-color: RGBA(18, 18, 57, 1);
+  border: 1px solid var(--secondary);
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.currency__wrapper {
+  display: flex;
+  justify-items: center;
+}
+
+.inputDiv {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  caret-color: var(--secondary);
+  color: var(--white);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.currency__wrapper > select {
+  width: 80%;
+  border: none;
+  background: var(--secondary);
+  color: white;
+  border-radius: 12px;
+  padding: 12px 12px;
+  text-align: left;
+}
+.currency__wrapper > select:focus {
+  outline: 2px solid var(--orange);
+  border: none;
+}
+
+.getRate {
+  background-color: var(--secondary);
+  border-radius: 12px;
+  border: none;
+  width: 100%;
+  padding: 12px 8px;
+  color: white;
+  font-weight: 400;
+  border: 1px solid transparent;
+}
+
+.getRate:hover {
+  background-color: RGBA(18, 18, 57, 1);
+  border: 1px solid var(--secondary);
+  transition: 0.4s ease;
+}

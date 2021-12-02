@@ -1,38 +1,96 @@
-.App {
-  text-align: center;
+:root {
+  --white: #fff;
+  --orange: #ffa500;
+  --primary: #0a0c21;
+  --secondary: #2e3192;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.homepage {
+  padding: 0px 60px;
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+nav {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 20px 0px 0px 0px;
 }
 
-.App-link {
-  color: #61dafb;
+nav > img {
+  width: 3.5em;
+  height: 3.5em;
+  margin-right: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.logo {
+  font-weight: 400;
+  font-size: 1.5em;
+  color: var(--white);
+}
+
+.hero__section {
+  width: 100%;
+}
+
+.heading {
+  font-size: 2.5em;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 40px;
+  margin: 20px 0 10px 0;
+}
+
+.subHeading {
+  color: var(--white);
+  font-weight: 300;
+  font-size: 1.1em;
+  line-height: 20px;
+  margin-bottom: 40px;
+}
+
+.lottie {
+  display: none;
+}
+
+.lottie__1 {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+@media only screen and (min-width: 822px) {
+  .wrapper {
+    display: flex;
+    align-items: center;
+    height: 70vh;
   }
-  to {
-    transform: rotate(360deg);
+  .mainBody {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .hero__section {
+    width: 75%;
+    margin-right: 4em;
+  }
+
+  .heading {
+    line-height: 60px;
+  }
+  .lottie {
+    display: block;
+    position: absolute;
+    top: 22em;
+    left: 2em;
+  }
+
+  .lottie__1 {
+    display: block;
+    position: absolute;
+    top: -50px;
+    right: 0;
   }
 }
