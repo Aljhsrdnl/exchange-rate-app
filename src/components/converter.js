@@ -57,6 +57,7 @@ function Converter() {
                 className="input"
                 onChange={handleInput}
                 placeholder="0.00"
+                min="0.01"
               />
             </div>
             <select value={currencyFrom} onChange={handleCurrencyFrom}>
