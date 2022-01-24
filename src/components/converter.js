@@ -53,7 +53,7 @@ function Converter() {
             <div className="inputDiv">
               <p className="you__have">You have</p>
               <input
-                type="text"
+                type="number"
                 className="input"
                 onChange={handleInput}
                 placeholder="0.00"
