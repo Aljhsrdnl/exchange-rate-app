@@ -21,11 +21,11 @@ function Converter() {
 
   useEffect(() => {
     fetch(
-      `https://freecurrencyapi.net/api/v2/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${currencyFrom}`
+      `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${currencyFrom}`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data.data);
         setRates(data.data);
       })
       .catch((error) => console.log(error));
@@ -40,8 +40,8 @@ function Converter() {
   };
 
   const computeExchangeValue = () => {
-    const val = num * rates[currencyTo];
-    console.log(val);
+    const val = num * rates[currencyTo].value;
+
     setExchangeValue(val);
   };
 

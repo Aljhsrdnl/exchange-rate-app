@@ -89,3 +89,7 @@
   border: 1px solid var(--secondary);
   transition: 0.4s ease;
 }
+
+.break-word {
+  word-wrap: break-word;
+}
