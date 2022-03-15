@@ -1,5 +1,6 @@
 :root {
   --white: #fff;
+  --primary-100: #5a5b93;
   --orange: #ffa500;
   --primary: #0a0c21;
   --secondary: #2e3192;
@@ -33,7 +34,7 @@ nav > img {
 }
 
 .heading {
-  font-size: 2.5em;
+  font-size: 8vw;
   font-weight: 800;
   color: var(--white);
   line-height: 40px;
@@ -41,7 +42,7 @@ nav > img {
 }
 
 .subHeading {
-  color: var(--white);
+  color: var(--primary-100);
   font-weight: 300;
   font-size: 1em;
   line-height: 20px;
@@ -64,6 +65,10 @@ nav > img {
 @media only screen and (min-width: 992px) {
   .homepage {
     margin: 0px 50px;
+  }
+
+  .heading {
+    font-size: 4vw;
   }
 
   .subHeading {
