@@ -43,7 +43,7 @@ nav > img {
 .subHeading {
   color: var(--white);
   font-weight: 300;
-  font-size: 1.1em;
+  font-size: 1em;
   line-height: 20px;
   margin-bottom: 40px;
 }
@@ -58,11 +58,16 @@ nav > img {
   top: 0;
   right: 0;
   z-index: -1;
+  opacity: 0.3;
 }
 
-@media only screen and (min-width: 822px) {
+@media only screen and (min-width: 992px) {
   .homepage {
     margin: 0px 50px;
+  }
+
+  .subHeading {
+    font-size: 1.2em;
   }
   .wrapper {
     display: flex;
@@ -95,5 +100,6 @@ nav > img {
     position: absolute;
     top: -50px;
     right: 0;
+    opacity: 1;
   }
 }

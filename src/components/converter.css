@@ -40,8 +40,7 @@
 }
 
 .currency__wrapper {
-  display: flex;
-  justify-items: center;
+  display: block;
 }
 
 .inputDiv {
@@ -57,14 +56,15 @@
   color: var(--white);
   font-size: 28px;
   font-weight: 800;
+  margin-bottom: 0.5em;
 }
 
 .currency__wrapper > select {
-  width: 80%;
+  width: 100%;
   border: none;
   background: var(--secondary);
   color: white;
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 12px 12px;
   text-align: left;
 }
@@ -92,4 +92,20 @@
 
 .break-word {
   word-wrap: break-word;
+}
+
+@media (min-width: 992px) {
+  .currency__wrapper {
+    display: flex;
+    justify-items: center;
+  }
+
+  .currency__wrapper > select {
+    width: 80%;
+    border-radius: 12px;
+  }
+
+  .input {
+    margin-bottom: 0;
+  }
 }
