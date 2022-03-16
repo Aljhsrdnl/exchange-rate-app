@@ -1,6 +1,6 @@
 import "./converter.css";
 import RateDiv from "./RateExchangeHolder";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import country_code from "../data/country_code";
 
 function Converter() {
@@ -12,11 +12,16 @@ function Converter() {
   const [rates, setRates] = useState([]);
 
   const handleInput = (e) => {
-    const num = e.target.value;
-    const n = num.toString().replace(/,/g, "");
-    const commas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    e.target.value = commas;
-    setNum(n);
+    //if input is alphabet
+    if (isNaN(e.target.value)) {
+      e.target.value = "";
+    } else {
+      const num = e.target.value;
+      const n = num.toString().replace(/,/g, "");
+      const commas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      e.target.value = commas;
+      setNum(n);
+    }
   };
 
   useEffect(() => {
@@ -25,24 +30,37 @@ function Converter() {
     )
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data.data);
         setRates(data.data);
       })
+
       .catch((error) => console.log(error));
   }, [currencyFrom]);
 
-  const handleCurrencyFrom = (e) => {
-    setCurrencyFrom(e.target.value);
-  };
-
-  const handleCurrencyTo = (e) => {
-    setCurrecyTo(e.target.value);
+  const useDidUpdateEffect = (fn, inputs) => {
+    const didMountRef = useRef(false);
+    useEffect(() => {
+      if (didMountRef.current) return fn();
+      didMountRef.current = true;
+    }, [inputs]);
   };
 
   const computeExchangeValue = () => {
     const val = num * rates[currencyTo].value;
-
     setExchangeValue(val);
+  };
+
+  useDidUpdateEffect(computeExchangeValue, num);
+
+  const handleCurrencyFrom = (e) => {
+    setCurrencyFrom(e.target.value);
+
+    computeExchangeValue();
+  };
+
+  const handleCurrencyTo = (e) => {
+    setCurrecyTo(e.target.value);
+
+    currencyFrom !== 0 && computeExchangeValue();
   };
 
   return (
@@ -53,11 +71,9 @@ function Converter() {
             <div className="inputDiv">
               <p className="you__have">You have</p>
               <input
-                type="number"
                 className="input"
                 onChange={handleInput}
                 placeholder="0.00"
-                min="0.01"
               />
             </div>
             <select value={currencyFrom} onChange={handleCurrencyFrom}>
@@ -79,9 +95,9 @@ function Converter() {
             </select>
           </div>
         </div>
-        <button className="getRate" onClick={computeExchangeValue}>
+        {/* <button className="getRate" onClick={computeExchangeValue}>
           GET RATE
-        </button>
+        </button> */}
       </div>
     </div>
   );
