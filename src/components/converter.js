@@ -1,41 +1,64 @@
 import "./converter.css";
 import RateDiv from "./RateExchangeHolder";
 import { useState, useEffect, useRef } from "react";
+import { useQuery, QueryClient, QueryClientProvider } from "react-query";
 import country_code from "../data/country_code";
 
-function Converter() {
+const queryClient = new QueryClient();
+
+const getData = async (key, baseCurrency) => {
+  // console.log(key.queryKey[1]);
+  const res = await fetch(
+    `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${key.queryKey[1]}`
+  );
+
+  return res.json();
+};
+
+const Converter = () => {
   //states
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(0); //amount to be converted
   const [exchangeValue, setExchangeValue] = useState(0);
   const [currencyFrom, setCurrencyFrom] = useState("USD");
   const [currencyTo, setCurrecyTo] = useState("PHP");
-  const [rates, setRates] = useState([]);
+  // const [rates, setRates] = useState([]);
 
+  const { data, status } = useQuery(["rates", currencyFrom], getData);
+
+  // console.log(status);
+
+  // if (status === "success") {
+  //   console.log(data.data[currencyTo].value);
+  // }
+
+  // -------------------WORK ON THIS LATER--------------------------
   const handleInput = (e) => {
     //if input is alphabet
-    if (isNaN(e.target.value)) {
-      e.target.value = "";
-    } else {
-      const num = e.target.value;
-      const n = num.toString().replace(/,/g, "");
-      const commas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      e.target.value = commas;
-      setNum(n);
-    }
+    // if (isNaN(e.target.value)) {
+    //   e.target.value = "";
+    // } else {
+    const num = e.target.value;
+    const n = num.toString().replace(/,/g, "");
+    const commas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    e.target.value = commas;
+    setNum(n);
+    // }
   };
 
-  useEffect(() => {
-    fetch(
-      `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${currencyFrom}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setRates(data.data);
-      })
+  // useEffect(() => {
+  //   fetch(
+  //     `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${currencyFrom}`
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setRates(data.data);
+  //     })
 
-      .catch((error) => console.log(error));
-  }, [currencyFrom]);
+  //     .catch((error) => console.log(error));
+  // }, [currencyFrom]);
 
+  //when num changes
   const useDidUpdateEffect = (fn, inputs) => {
     const didMountRef = useRef(false);
     useEffect(() => {
@@ -45,7 +68,7 @@ function Converter() {
   };
 
   const computeExchangeValue = () => {
-    const val = num * rates[currencyTo].value;
+    const val = num * data.data[currencyTo].value;
     setExchangeValue(val);
   };
 
@@ -53,11 +76,13 @@ function Converter() {
 
   const handleCurrencyFrom = (e) => {
     setCurrencyFrom(e.target.value);
-
+    console.log("currencyFrom changed!");
+    // console.log(`${currencyFrom} and ${currencyTo}`);
     computeExchangeValue();
   };
 
   const handleCurrencyTo = (e) => {
+    console.log("currencyTo changed!");
     setCurrecyTo(e.target.value);
 
     currencyFrom !== 0 && computeExchangeValue();
@@ -101,6 +126,13 @@ function Converter() {
       </div>
     </div>
   );
-}
+};
 
-export default Converter;
+const hof = (WrappedComponent) => {
+  return (props) => (
+    <QueryClientProvider client={queryClient}>
+      <WrappedComponent {...props} />
+    </QueryClientProvider>
+  );
+};
+export default hof(Converter);
