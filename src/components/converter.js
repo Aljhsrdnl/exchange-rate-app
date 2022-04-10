@@ -1,82 +1,65 @@
 import "./converter.css";
 import RateDiv from "./RateExchangeHolder";
-import { useState, useEffect, useRef } from "react";
-import { useQuery, QueryClient, QueryClientProvider } from "react-query";
-import country_code from "../data/country_code";
-
-const queryClient = new QueryClient();
-
-const getData = async (key, baseCurrency) => {
-  // console.log(key.queryKey[1]);
-  const res = await fetch(
-    `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${key.queryKey[1]}`
-  );
-
-  return res.json();
-};
-
-const Converter = () => {
+import { useState, useEffect } from "react";
+import codes from "../data/cc";
+import loading__lottie from "../lotties/Loading_circle.json";
+import Lottie from "react-lottie";
+const Converter = (props) => {
   //states
   const [num, setNum] = useState(0); //amount to be converted
-  const [exchangeValue, setExchangeValue] = useState(0);
-  const [currencyFrom, setCurrencyFrom] = useState("USD");
+  const [exchangeValue, setExchangeValue] = useState(0); //computed value
+  const [currencyFrom, setCurrencyFrom] = useState("EUR");
   const [currencyTo, setCurrecyTo] = useState("PHP");
-  // const [rates, setRates] = useState([]);
+  const [rates, setRates] = useState([]); //rates container
+  const [isLoading, setIsLoading] = useState(false);
+  const [isNan, setIsNan] = useState(false);
 
-  const { data, status } = useQuery(["rates", currencyFrom], getData);
-
-  // console.log(status);
-
-  // if (status === "success") {
-  //   console.log(data.data[currencyTo].value);
-  // }
-
-  // -------------------WORK ON THIS LATER--------------------------
-  const handleInput = (e) => {
-    //if input is alphabet
-    // if (isNaN(e.target.value)) {
-    //   e.target.value = "";
-    // } else {
-    const num = e.target.value;
-    const n = num.toString().replace(/,/g, "");
-    const commas = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    e.target.value = commas;
-    setNum(n);
-    // }
+  const loadingOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: loading__lottie,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
 
-  // useEffect(() => {
-  //   fetch(
-  //     `https://api.currencyapi.com/v3/latest?apikey=${process.env.REACT_APP_KEY}&base_currency=${currencyFrom}`
-  //   )
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       setRates(data.data);
-  //     })
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const res = await fetch(`/rates?base=${currencyFrom}`);
+      const json = await res.json();
+      setRates(json.rates);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [currencyFrom]);
 
-  //     .catch((error) => console.log(error));
-  // }, [currencyFrom]);
+  useEffect(() => {
+    computeExchangeValue();
+  }, [num, currencyFrom, currencyTo, rates]);
 
-  //when num changes
-  const useDidUpdateEffect = (fn, inputs) => {
-    const didMountRef = useRef(false);
-    useEffect(() => {
-      if (didMountRef.current) return fn();
-      didMountRef.current = true;
-    }, [inputs]);
+  //how to index the rate object
+  // console.log(rates[currencyTo]);
+  // -------------------WORK ON THIS LATER--------------------------
+  const handleInput = (e) => {
+    const num = e.target.value;
+
+    if (isNaN(num)) {
+      setIsNan(true);
+      return;
+    } else {
+      setIsNan(false);
+      setNum(num);
+    }
   };
 
   const computeExchangeValue = () => {
-    const val = num * data.data[currencyTo].value;
+    const val = num * rates[currencyTo];
     setExchangeValue(val);
   };
 
-  useDidUpdateEffect(computeExchangeValue, num);
-
   const handleCurrencyFrom = (e) => {
     setCurrencyFrom(e.target.value);
-    console.log("currencyFrom changed!");
     // console.log(`${currencyFrom} and ${currencyTo}`);
     computeExchangeValue();
   };
@@ -102,20 +85,28 @@ const Converter = () => {
               />
             </div>
             <select value={currencyFrom} onChange={handleCurrencyFrom}>
-              {country_code.map((country) => (
-                <option value={country[0]}>{country[1]}</option>
+              {codes.map((code) => (
+                <option value={code[0]}>{code[1]}</option>
               ))}
             </select>
+            <small className="error__msg">
+              {isNan && `Please enter a valid number.`}
+            </small>
           </div>
         </div>
+        {isLoading && (
+          <div className="loading__lottie__div">
+            <Lottie options={loadingOptions} width={50} height={50} />
+          </div>
+        )}
         <div className="fromDiv">
           <div className="currency__wrapper">
             <div className="inputDiv">
               <RateDiv rateVal={exchangeValue} />
             </div>
             <select value={currencyTo} onChange={handleCurrencyTo}>
-              {country_code.map((country) => (
-                <option value={country[0]}>{country[1]}</option>
+              {codes.map((code) => (
+                <option value={code[0]}>{code[1]}</option>
               ))}
             </select>
           </div>
@@ -128,11 +119,4 @@ const Converter = () => {
   );
 };
 
-const hof = (WrappedComponent) => {
-  return (props) => (
-    <QueryClientProvider client={queryClient}>
-      <WrappedComponent {...props} />
-    </QueryClientProvider>
-  );
-};
-export default hof(Converter);
+export default Converter;

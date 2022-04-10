@@ -43,6 +43,16 @@
   display: block;
 }
 
+.error__msg {
+  font-size: 10px;
+  font-weight:lighter;
+  color: rgb(255, 85, 85);
+}
+
+.loading__lottie__div {
+  margin-bottom: 1em;
+}
+
 .inputDiv {
   width: 100%;
 }

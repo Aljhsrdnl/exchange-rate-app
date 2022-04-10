@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
-const RateExchangeHolder = ({ rateVal }) => {
+
+const RateExchangeHolder = ({ rateVal}) => {
+
+  
   //states
   const [commas, setCommas] = useState("");
   const putCommas = (rateVal) => {
@@ -15,6 +18,7 @@ const RateExchangeHolder = ({ rateVal }) => {
   return (
     <div className="input__div">
       <p className="you__have">You get</p>
+      
       <input type="text" className="input" readOnly value={commas} />
     </div>
   );
