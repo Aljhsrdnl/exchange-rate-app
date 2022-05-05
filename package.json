@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "concurrently": "^7.1.0",
     "dotenv": "^10.0.0",
     "got": "^12.0.3",
@@ -16,7 +16,6 @@
     "react-lottie": "^1.2.3",
     "react-query": "^3.34.16",
     "react-scripts": "4.0.3",
-    "request": "^2.88.2",
     "stream": "^0.0.2",
     "web-vitals": "^1.0.1"
   },

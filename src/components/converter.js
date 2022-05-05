@@ -29,8 +29,6 @@ const Converter = (props) => {
       const res = await fetch(`http://localhost:8080/${currencyFrom}`);
       const json = await res.json();
       setIsLoading(false);
-      console.log(currencyFrom)
-      console.log(json)
       setRates(json.rates);
     }
 
