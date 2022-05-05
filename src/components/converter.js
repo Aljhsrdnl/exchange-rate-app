@@ -8,7 +8,7 @@ const Converter = (props) => {
   //states
   const [num, setNum] = useState(0); //amount to be converted
   const [exchangeValue, setExchangeValue] = useState(0); //computed value
-  const [currencyFrom, setCurrencyFrom] = useState("EUR");
+  const [currencyFrom, setCurrencyFrom] = useState("USD");
   const [currencyTo, setCurrecyTo] = useState("PHP");
   const [rates, setRates] = useState([]); //rates container
   const [isLoading, setIsLoading] = useState(false);
@@ -24,15 +24,19 @@ const Converter = (props) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (currencyFrom) => {
       setIsLoading(true);
-      const res = await fetch(`/rates?base=${currencyFrom}`);
+      const res = await fetch(`http://localhost:8080/${currencyFrom}`);
       const json = await res.json();
-      setRates(json.rates);
       setIsLoading(false);
-    };
-    fetchData();
+      console.log(currencyFrom)
+      console.log(json)
+      setRates(json.rates);
+    }
+
+    fetchData(currencyFrom);
   }, [currencyFrom]);
+  
 
   useEffect(() => {
     computeExchangeValue();
