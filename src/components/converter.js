@@ -27,7 +27,10 @@ const Converter = (props) => {
     const fetchData = async (currencyFrom) => {
       setIsLoading(true);
       const res = await fetch(`http://localhost:8080/${currencyFrom}`)
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          
+        })
       const json = await res.json();
       setIsLoading(false);
       setRates(json.rates);

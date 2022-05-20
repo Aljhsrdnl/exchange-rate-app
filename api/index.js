@@ -1,8 +1,5 @@
-const express = require("express");
-const axios = require("axios")
-
-
-const app = express();
+const app = require('express')();
+const axios = require('axios');
 
 const call_external = (baseCurrency) => {
     const promise = axios.get(`https://www.currency-api.com/rates?base=${baseCurrency}`)
@@ -27,8 +24,4 @@ app.get("/:currencyFrom", (req, res) => {
 })
 
 
-
-
-app.listen(8080, () => {
-    console.log('listening on port 8080')
-})
+module.exports = app;
