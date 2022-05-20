@@ -26,7 +26,7 @@ const Converter = (props) => {
   useEffect(() => {
     const fetchData = async (currencyFrom) => {
       setIsLoading(true);
-      const res = await fetch(`http://localhost:8080/${currencyFrom}`)
+      const res = await fetch(`/api/${currencyFrom}`)
         .catch(err => {
           console.log(err)
           

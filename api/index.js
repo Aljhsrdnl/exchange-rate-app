@@ -1,5 +1,6 @@
 const app = require('express')();
 const axios = require('axios');
+const router = require('./routes')
 
 const call_external = (baseCurrency) => {
     const promise = axios.get(`https://www.currency-api.com/rates?base=${baseCurrency}`)
@@ -14,14 +15,10 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get("/:currencyFrom", (req, res) => {
-    const base_currency = req.params['currencyFrom']
-    call_external(base_currency)
-        .then(data => {
-            res.send(data)
-        })
-        .catch(err => console.log(err))
-})
+
+app.use("/api", router);
+
+
 
 
 module.exports = app;

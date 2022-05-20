@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 
-const RateExchangeHolder = ({ rateVal}) => {
+const RateExchangeHolder = ({ rateVal }) => {
 
   
   //states
-  const [commas, setCommas] = useState("");
+  const [commas, setCommas] = useState("0");
   const putCommas = (rateVal) => {
     const fixedNum = rateVal.toFixed(3);
     var commas = fixedNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
