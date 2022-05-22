@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import codes from "../data/cc";
 import loading__lottie from "../lotties/Loading_circle.json";
 import Lottie from "react-lottie";
+import NumberFormat from "react-number-format";
 const Converter = (props) => {
   //states
-  const [num, setNum] = useState(0); //amount to be converted
-  const [exchangeValue, setExchangeValue] = useState(0); //computed value
+  const [num, setNum] = useState(); //amount to be converted
+  const [exchangeValue, setExchangeValue] = useState(); //computed value
   const [currencyFrom, setCurrencyFrom] = useState("USD");
   const [currencyTo, setCurrecyTo] = useState("PHP");
   const [rates, setRates] = useState([]); //rates container
   const [isLoading, setIsLoading] = useState(false);
-  const [isNan, setIsNan] = useState(false);
+  const [currency_from_prefix, setCurrencyFromPrefix] = useState("$ ")
+  const [currency_to_prefix, setCurrencyToPrefix] = useState("₱ ");
 
   const loadingOptions = {
     loop: true,
@@ -44,36 +46,35 @@ const Converter = (props) => {
     computeExchangeValue();
   }, [num, currencyFrom, currencyTo, rates]);
 
-  //how to index the rate object
-  // console.log(rates[currencyTo]);
-  // -------------------WORK ON THIS LATER--------------------------
-  const handleInput = (e) => {
-    const num = e.target.value;
-
-    if (isNaN(num)) {
-      setIsNan(true);
-      return;
-    } else {
-      setIsNan(false);
+  
+  const handleInput = (val) => {
+    const num = val;
       setNum(num);
-    }
+
   };
+
 
   const computeExchangeValue = () => {
     const val = num * rates[currencyTo];
+    console.log(`values: ${val}`)
     setExchangeValue(val);
   };
 
+  
   const handleCurrencyFrom = (e) => {
     setCurrencyFrom(e.target.value);
-    // console.log(`${currencyFrom} and ${currencyTo}`);
+    let arr = codes.filter(code => code[0] === e.target.value)
+    let prefix = arr[0][2] + " ";
+    setCurrencyFromPrefix(prefix);
     computeExchangeValue();
   };
-
+  
   const handleCurrencyTo = (e) => {
-    console.log("currencyTo changed!");
+    
     setCurrecyTo(e.target.value);
-
+    let arr = codes.filter(code => code[0] === e.target.value)
+    let prefix = arr[0][2] + " ";
+    setCurrencyToPrefix(prefix);
     currencyFrom !== 0 && computeExchangeValue();
   };
 
@@ -84,10 +85,22 @@ const Converter = (props) => {
           <div className="currency__wrapper">
             <div className="inputDiv">
               <p className="you__have">You have</p>
-              <input
+              
+              <NumberFormat 
+              placeholder={currency_from_prefix + " 0.00"}
                 className="input"
-                onChange={handleInput}
-                placeholder="0.00"
+                thousandGroupStyle="thousand"
+                value = {num}
+                onValueChange={ (numbers) => {
+                  let value = numbers.value
+                  handleInput(value);
+                }}
+                prefix={currency_from_prefix}
+                decimalSeparator="."
+                decimalScale={2}
+                type="text"
+                thousandSeparator={true}
+                allowNegative={false}
               />
             </div>
             <select value={currencyFrom} onChange={handleCurrencyFrom}>
@@ -95,9 +108,7 @@ const Converter = (props) => {
                 <option value={code[0]}>{code[1]}</option>
               ))}
             </select>
-            <small className="error__msg">
-              {isNan && `Please enter a valid number.`}
-            </small>
+            
           </div>
         </div>
         {isLoading && (
@@ -106,9 +117,22 @@ const Converter = (props) => {
           </div>
         )}
         <div className="fromDiv">
+        
           <div className="currency__wrapper">
             <div className="inputDiv">
-              <RateDiv rateVal={exchangeValue} />
+            <p className="you__have">You get</p>
+              <NumberFormat 
+              placeholder={currency_to_prefix + " 0.00"}
+                  className="input"
+                  thousandGroupStyle="thousand"
+                  value = {exchangeValue}
+                  prefix={currency_to_prefix}
+                  decimalSeparator="."
+                  decimalScale={2}
+                  type="text"
+                  thousandSeparator={true}
+                  allowNegative={false}
+                />
             </div>
             <select value={currencyTo} onChange={handleCurrencyTo}>
               {codes.map((code) => (
@@ -117,9 +141,7 @@ const Converter = (props) => {
             </select>
           </div>
         </div>
-        {/* <button className="getRate" onClick={computeExchangeValue}>
-          GET RATE
-        </button> */}
+        
       </div>
     </div>
   );
